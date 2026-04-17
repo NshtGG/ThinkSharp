@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Supabase Test</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <h1>Check Console</h1>
+  <script>
+    console.log('SDK loaded:', !!window.supabase);
+    if (window.supabase) {
+      const supabase = window.supabase.createClient(
+        'https://jfnadthiwzguuzvfwbrt.supabase.co',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpmbmFkdGhpd3pndXV6dmZ3YnJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzMjU5OTUsImV4cCI6MjA5MTkwMTk5NX0.lG9zj5_Klt9i1bT_ZSDJ-hTMoRLPlGn_6HZrnqGeXSI'
+      );
+      console.log('Supabase instance created:', supabase);
+      window.testSupabase = supabase; // Make global for console testing
+    } else {
+      console.error('Supabase SDK failed to load');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thinksharp · Deepen Daily</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js"></script>
+  
+</head>
+<button id="logoutBtn" class="theme-toggle" style="margin-left: 8px;">🚪 Logout</button>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">Thinksharp</div>
+      <nav class="nav">
+        <button class="nav-item active" data-view="dashboard">🏠 Dashboard</button>
+        <button class="nav-item" data-view="question">📓 Daily Question</button>
+        <button class="nav-item" data-view="commitments">✅ Commitments</button>
+        <button class="nav-item" data-view="leaderboard">🏆 Leaderboard</button>
+        <button class="nav-item" data-view="patterns">🔍 Patterns</button>
+        <button class="nav-item" data-view="music">🎵 Music</button>
+      </nav>
+      <div class="sidebar-footer">v0.3 · offline demo</div>
+    </aside>
+
+    <!-- Main Content Area - views will be swapped here -->
+    <main class="main">
+      <!-- Dashboard View -->
+      <section id="view-dashboard" class="view active">
+        <header class="header">
+          <div class="greeting">
+            <h1>Welcome back, Vikram</h1>
+            <p>Monday, April 15 · Keep your streak alive</p>
+          </div>
+          <div class="header-actions">
+            <span class="streak-badge">🔥 7 day streak</span>
+            <button class="theme-toggle" id="themeToggle">🌙 Dark</button>
+            <div class="avatar">V</div>
+          </div>
+        </header>
+        <div class="card">
+          <span class="card-label">✨ Today's deep question</span>
+          <div class="question-text">What's one belief you held strongly five years ago that you've since changed your mind about?</div>
+          <textarea rows="3" placeholder="Write your reflection here…"></textarea>
+          <div class="mood-row">
+            <span class="text-secondary">Mood:</span>
+            <div class="mood-buttons">
+              <button class="mood-btn">😊</button>
+              <button class="mood-btn">😐</button>
+              <button class="mood-btn">😔</button>
+            </div>
+            <button class="submit-btn">Submit answer</button>
+          </div>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <h3>✅ Today's Commitment</h3>
+            <div class="commitment-task">
+              <div class="task-title">Deep work session</div>
+              <div class="timer-display" id="timer">24:00:00</div>
+              <div class="timer-label">Time remaining to complete</div>
+              <button class="reset-timer" id="resetTimer">↻ Reset 24h</button>
+              <p class="commitment-checkbox"><input type="checkbox" id="commitmentDone"> Mark as done</p>
+            </div>
+          </div>
+          <div class="card">
+            <h3>🏆 Leaderboard</h3>
+            <div class="leaderboard-row"><span>1. Sarah K.</span><span class="streak-number">🔥 42</span></div>
+            <div class="leaderboard-row"><span>2. Mike R.</span><span class="streak-number">🔥 38</span></div>
+            <div class="leaderboard-row"><span>3. Alex J.</span><span class="streak-number">🔥 35</span></div>
+            <div class="leaderboard-row highlight"><span>7. You</span><span class="streak-number">🔥 7</span></div>
+            <a href="#" class="view-link">View full leaderboard →</a>
+          </div>
+        </div>
+        <div class="card">
+          <h3>🧠 Weekly pattern</h3>
+          <div class="pattern-insight">"Your reflections show a shift toward valuing rest over productivity guilt. You've mentioned 'rest' 4 times this week — a positive trend."</div>
+          <button class="reset-timer insight-btn">Generate new insight</button>
+        </div>
+      </section>
+
+      <!-- Daily Question View (full page) -->
+      <section id="view-question" class="view">
+        <header class="header">
+          <h1>Daily Deep Question</h1>
+        </header>
+        <div class="card">
+          <span class="card-label">✨ Today's question</span>
+          <div class="question-text">What's one belief you held strongly five years ago that you've since changed your mind about?</div>
+          <textarea rows="6" placeholder="Write your reflection here…"></textarea>
+          <div class="mood-row">
+            <span class="text-secondary">Mood:</span>
+            <div class="mood-buttons">
+              <button class="mood-btn">😊</button>
+              <button class="mood-btn">😐</button>
+              <button class="mood-btn">😔</button>
+            </div>
+            <button class="submit-btn">Submit answer</button>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Previous answers</h3>
+          <p class="text-secondary">Your answer history will appear here.</p>
+        </div>
+      </section>
+
+      <!-- Commitments View -->
+      <section id="view-commitments" class="view">
+        <header class="header">
+          <h1>Commitments</h1>
+        </header>
+        <div class="card">
+          <h3>Today's active commitment</h3>
+          <div class="commitment-task">
+            <div class="task-title">Deep work session</div>
+            <div class="timer-display" id="timer2">24:00:00</div>
+            <div class="timer-label">Time remaining to complete</div>
+            <button class="reset-timer" id="resetTimer2">↻ Reset 24h</button>
+            <p class="commitment-checkbox"><input type="checkbox" id="commitmentDone2"> Mark as done</p>
+          </div>
+        </div>
+        <!-- Additional commitments could be listed here -->
+      </section>
+
+      <!-- Leaderboard View -->
+      <section id="view-leaderboard" class="view">
+        <header class="header">
+          <h1>Leaderboard</h1>
+        </header>
+        <div class="card">
+          <div class="leaderboard-row"><span>1. Sarah K.</span><span class="streak-number">🔥 42</span></div>
+          <div class="leaderboard-row"><span>2. Mike R.</span><span class="streak-number">🔥 38</span></div>
+          <div class="leaderboard-row"><span>3. Alex J.</span><span class="streak-number">🔥 35</span></div>
+          <div class="leaderboard-row"><span>4. Priya M.</span><span class="streak-number">🔥 29</span></div>
+          <div class="leaderboard-row"><span>5. Jordan L.</span><span class="streak-number">🔥 24</span></div>
+          <div class="leaderboard-row highlight"><span>7. You</span><span class="streak-number">🔥 7</span></div>
+        </div>
+      </section>
+
+      <!-- Patterns View -->
+      <section id="view-patterns" class="view">
+        <header class="header">
+          <h1>Reflection Patterns</h1>
+        </header>
+        <div class="card">
+          <div class="pattern-insight">"Your reflections show a shift toward valuing rest over productivity guilt. You've mentioned 'rest' 4 times this week."</div>
+          <button class="reset-timer insight-btn">Generate new insight</button>
+        </div>
+        <div class="card">
+          <h3>Mood trend</h3>
+          <p class="text-secondary">📈 Your mood has improved 15% this week.</p>
+        </div>
+      </section>
+
+      <!-- Music View -->
+      <section id="view-music" class="view">
+        <header class="header">
+          <h1>Focus Music</h1>
+        </header>
+        <div class="card">
+          <h3>Now playing</h3>
+          <div style="display: flex; align-items: center; gap: 16px;">
+            <span style="font-size: 40px;">🎵</span>
+            <div>
+              <div style="font-weight: 600;">Lofi Beats</div>
+              <div class="text-secondary">Chill instrumental</div>
+            </div>
+          </div>
+          <div style="margin-top: 20px;">
+            <button class="music-btn" id="playPause2">▶️</button>
+            <div class="progress-bar" style="width: 100%; margin-top: 12px;">
+              <div class="progress-fill" style="width: 30%;"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Music Player (fixed) -->
+    <div class="music-player">
+      <span>🎵 Focus</span>
+      <button class="music-btn" id="playPauseMain">▶️</button>
+      <div class="progress-bar">
+        <div class="progress-fill"></div>
+      </div>
+      <span class="music-label">Lofi</span>
+    </div>
+  </div>
+<div class="header-actions">
+  <span class="streak-badge">🔥 7 day streak</span>
+  <button class="theme-toggle" id="themeToggle">🌙 Dark</button>
+  <button class="theme-toggle" id="logoutBtn" title="Sign out">🚪</button>
+  <div class="avatar">V</div>
+</div>
+  <script src="script.js"></script>
+</body>
+</html>

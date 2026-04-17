@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login · Thinksharp</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body style="background: var(--bg); color: var(--text); display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0;">
+  <div class="card" style="max-width: 400px; width: 100%; padding: 32px;">
+    <div class="logo" style="text-align: center; margin-bottom: 24px; font-size: 28px; font-weight: bold; color: var(--primary);">Thinksharp</div>
+    <h2 style="text-align: center; margin-bottom: 24px;">Sign in</h2>
+    
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="Email" required style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--text); margin-bottom: 12px;">
+      <input type="password" id="password" placeholder="Password" required style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--text); margin-bottom: 16px;">
+      <button type="submit" class="submit-btn" style="width: 100%;">Sign in</button>
+    </form>
+    
+    <p id="errorMsg" style="color: #ef4444; text-align: center; margin-top: 12px;"></p>
+    <p style="text-align: center; margin-top: 20px;">
+      Don't have an account? <a href="signup.html" style="color: var(--primary);">Sign up</a>
+    </p>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://jfnadthiwzguuzvfwbrt.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpmbmFkdGhpd3pndXV6dmZ3YnJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzMjU5OTUsImV4cCI6MjA5MTkwMTk5NX0.lG9zj5_Klt9i1bT_ZSDJ-hTMoRLPlGn_6HZrnqGeXSI';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Redirect if already logged in
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) window.location.href = 'index.html';
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        document.getElementById('errorMsg').textContent = error.message;
+      } else {
+        window.location.href = 'index.html';
+      }
+    });
+  </script>
+</body>
+</html>
