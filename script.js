@@ -1,102 +1,23 @@
-// ==================== SUPABASE INITIALIZATION ====================
+// ==================== SUPABASE (Optional – only for future data, no auth) ====================
 (function initSupabase() {
   const SUPABASE_URL = 'https://jfnadthiwzguuzvfwbrt.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpmbmFkdGhpd3pndXV6dmZ3YnJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzMjU5OTUsImV4cCI6MjA5MTkwMTk5NX0.lG9zj5_Klt9i1bT_ZSDJ-hTMoRLPlGn_6HZrnqGeXSI';
 
   if (typeof window.supabase === 'undefined') {
-    console.warn('Supabase SDK not loaded. Retrying in 100ms...');
+    console.warn('Supabase SDK not loaded. Retrying...');
     setTimeout(initSupabase, 100);
     return;
   }
 
   window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  console.log('✅ Supabase client ready at window.supabaseClient');
+  console.log('✅ Supabase ready (auth disabled)');
 })();
-// ==================== AUTH CHECK ====================
-async function checkAuth() {
-  // Wait for Supabase client to be ready
-  if (!window.supabaseClient) {
-    setTimeout(checkAuth, 100);
-    return;
-  }
-  
-  const { data: { session } } = await window.supabaseClient.auth.getSession();
-  if (!session) {
-    // Not logged in, redirect to login page
-    window.location.href = 'login.html';
-  } else {
-    console.log('✅ User authenticated:', session.user.email);
-    // Optionally update UI with user info
-    const avatarEl = document.querySelector('.avatar');
-    if (avatarEl) {
-      avatarEl.textContent = session.user.email?.charAt(0).toUpperCase() || 'U';
-    }
-    const greetingName = document.querySelector('.greeting h1');
-    if (greetingName) {
-      const name = session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'there';
-      greetingName.textContent = `Welcome back, ${name}`;
-    }
-  }
-}
 
-checkAuth();
-// ==================== AUTH GUARD ====================
-async function checkAuth() {
-  // Wait for Supabase client
-  if (!window.supabaseClient) {
-    setTimeout(checkAuth, 100);
-    return;
-  }
-
-  const { data: { session } } = await window.supabaseClient.auth.getSession();
-
-  if (!session) {
-    // Not logged in → go to login
-    window.location.href = 'login.html';
-    return;
-  }
-
-  // User is logged in → update UI
-  console.log('✅ Logged in as', session.user.email);
-
-  // Update avatar and greeting
-  const avatarEl = document.querySelector('.avatar');
-  if (avatarEl) {
-    avatarEl.textContent = session.user.email?.charAt(0).toUpperCase() || 'U';
-  }
-
-  const greetingName = document.querySelector('.greeting h1');
-  if (greetingName) {
-    const name = session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'there';
-    greetingName.textContent = `Welcome back, ${name}`;
-  }
-}
-
-// Start auth check
-checkAuth();
-
-// ==================== LOGOUT FUNCTIONALITY ====================
-function setupLogout() {
-  const logoutBtn = document.getElementById('logoutBtn');
-  if (logoutBtn) {
-    logoutBtn.addEventListener('click', async () => {
-      await window.supabaseClient.auth.signOut();
-      window.location.href = 'login.html';
-    });
-  }
-}
-
-// Wait for DOM then setup logout
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', setupLogout);
-} else {
-  setupLogout();
-}
-// ==================== APPLICATION LOGIC ====================
+// ==================== UI – NO AUTH ====================
 (function() {
   "use strict";
 
-  console.log('🚀 Thinksharp app starting...');
+  console.log('🚀 Thinksharp UI starting...');
 
   // ==================== THEME TOGGLE ====================
   const themeToggle = document.getElementById('themeToggle');
@@ -149,15 +70,6 @@ if (document.readyState === 'loading') {
         btn.classList.add('active');
       }
     });
-
-    // Optional: update page title or header
-    const headerH1 = document.querySelector(`#view-${viewId} .header h1`);
-    if (!headerH1) {
-      const greetingH1 = document.querySelector('.greeting h1');
-      if (greetingH1 && viewId === 'dashboard') {
-        greetingH1.textContent = 'Welcome back, Vikram';
-      }
-    }
   }
 
   navButtons.forEach(btn => {
@@ -173,7 +85,7 @@ if (document.readyState === 'loading') {
     switchView('dashboard');
   }
 
-  // ==================== TIMER (SYNCED ACROSS VIEWS) ====================
+  // ==================== TIMER ====================
   const timerEls = [
     document.getElementById('timer'),
     document.getElementById('timer2')
@@ -265,14 +177,5 @@ if (document.readyState === 'loading') {
     clearInterval(timerInterval);
   });
 
-  console.log('✅ Thinksharp UI ready');
+  console.log('✅ Thinksharp ready (auth‑free)');
 })();
-
-
-const logoutBtn = document.getElementById('logoutBtn');
-if (logoutBtn) {
-  logoutBtn.addEventListener('click', async () => {
-    await window.supabaseClient.auth.signOut();
-    window.location.href = 'login.html';
-  });
-}
